@@ -1,26 +1,40 @@
 import { Injectable } from '@nestjs/common';
-import { CreateDescriptionDto } from './dto/create-description.dto';
-import { UpdateDescriptionDto } from './dto/update-description.dto';
+import { Prisma } from '@prisma/client';
+import { DatabaseService } from 'src/database/database.service';
 
 @Injectable()
 export class DescriptionsService {
-  create(createDescriptionDto: CreateDescriptionDto) {
-    return 'This action adds a new description';
+  constructor(private readonly databaseService: DatabaseService) {}
+
+  async create(createDescriptionDto: Prisma.DescriptionCreateInput) {
+    return this.databaseService.description.create({
+      data: createDescriptionDto,
+    });
   }
 
-  findAll() {
-    return `This action returns all descriptions`;
+  async findAll() {
+    return this.databaseService.description.findMany({});
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} description`;
+  async findOne(id: number) {
+    return this.databaseService.description.findUnique({
+      where: { id },
+    });
   }
 
-  update(id: number, updateDescriptionDto: UpdateDescriptionDto) {
-    return `This action updates a #${id} description`;
+  async update(
+    id: number,
+    updateDescriptionDto: Prisma.DescriptionUpdateInput,
+  ) {
+    return this.databaseService.description.update({
+      where: { id },
+      data: updateDescriptionDto,
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} description`;
+  async remove(id: number) {
+    return this.databaseService.description.delete({
+      where: { id },
+    });
   }
 }

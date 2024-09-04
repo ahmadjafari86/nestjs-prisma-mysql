@@ -1,14 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { DescriptionsService } from './descriptions.service';
-import { CreateDescriptionDto } from './dto/create-description.dto';
-import { UpdateDescriptionDto } from './dto/update-description.dto';
+import { Prisma } from '@prisma/client';
 
 @Controller('descriptions')
 export class DescriptionsController {
   constructor(private readonly descriptionsService: DescriptionsService) {}
 
   @Post()
-  create(@Body() createDescriptionDto: CreateDescriptionDto) {
+  create(@Body() createDescriptionDto: Prisma.DescriptionCreateInput) {
     return this.descriptionsService.create(createDescriptionDto);
   }
 
@@ -23,7 +30,10 @@ export class DescriptionsController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateDescriptionDto: UpdateDescriptionDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateDescriptionDto: Prisma.DescriptionUpdateInput,
+  ) {
     return this.descriptionsService.update(+id, updateDescriptionDto);
   }
 
